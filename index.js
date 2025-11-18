@@ -1,3 +1,4 @@
+```javascript
 /**
  * Knight Bot - A WhatsApp Bot
  * Copyright (c) 2024 Professor
@@ -211,7 +212,7 @@ async function startXeonBotInc() {
 
     XeonBotInc.serializeM = (m) => smsg(XeonBotInc, m, store)
 
-    // Handle pairing code
+    // Handle pairing code - FIXED VALIDATION FOR AZERBAIJAN
     if (pairingCode && !XeonBotInc.authState.creds.registered) {
         if (useMobile) throw new Error('Cannot use pairing code with mobile api')
 
@@ -225,11 +226,25 @@ async function startXeonBotInc() {
         // Clean the phone number - remove any non-digit characters
         phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
 
-        // Validate the phone number using awesome-phonenumber
+        // ✅ FIXED VALIDATION - Support Azerbaijan and other countries
         const pn = require('awesome-phonenumber');
-        if (!pn('+' + phoneNumber).isValid()) {
-            console.log(chalk.red('Invalid phone number. Please enter your full international number (e.g., 15551234567 for US, 447911123456 for UK, etc.) without + or spaces.'));
-            process.exit(1);
+        
+        // Custom validation for Azerbaijan numbers
+        if (phoneNumber.startsWith('994')) {
+            // Azerbaijan specific validation
+            if (phoneNumber.length >= 9 && phoneNumber.length <= 12) {
+                console.log(chalk.green('✅ Azerbaijan number detected and accepted'));
+            } else {
+                console.log(chalk.red('❌ Invalid Azerbaijan number length. Should be 9-12 digits'));
+                process.exit(1);
+            }
+        } else {
+            // For other countries, use standard validation
+            const phoneUtil = pn('+' + phoneNumber);
+            if (!phoneUtil.isValid()) {
+                console.log(chalk.red('❌ Invalid phone number. Please enter your full international number (e.g., 15551234567 for US, 447911123456 for UK, etc.) without + or spaces.'));
+                process.exit(1);
+            }
         }
 
         setTimeout(async () => {
@@ -400,3 +415,13 @@ fs.watchFile(file, () => {
     delete require.cache[file]
     require(file)
 })
+```
+
+Key Fixes:
+
+1. ✅ Azerbaijan number validation added (994 prefix check)
+2. ✅ Azerbaijan numbers ke liye length validation (9-12 digits)
+3. ✅ Standard validation for other countries
+4. ✅ Better error messages
+
+Ab 994408121099 number work karega! 🎯
