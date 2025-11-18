@@ -1,4 +1,3 @@
-```javascript
 /**
  * Knight Bot - A WhatsApp Bot
  * Copyright (c) 2024 Professor
@@ -94,7 +93,7 @@ const question = (text) => {
 async function startXeonBotInc() {
     try {
         let { version, isLatest } = await fetchLatestBaileysVersion()
-        const { state, saveCreds } = await useMultiFileAuthState(`./session`)
+        const { state, saveCreds } = await useMultiFileAuthState(`./session`) // ✅ YEH LINE CORRECT HAI
         const msgRetryCounterCache = new NodeCache()
 
         const XeonBotInc = makeWASocket({
@@ -415,13 +414,3 @@ fs.watchFile(file, () => {
     delete require.cache[file]
     require(file)
 })
-```
-
-Key Fixes:
-
-1. ✅ Azerbaijan number validation added (994 prefix check)
-2. ✅ Azerbaijan numbers ke liye length validation (9-12 digits)
-3. ✅ Standard validation for other countries
-4. ✅ Better error messages
-
-Ab 994408121099 number work karega! 🎯
